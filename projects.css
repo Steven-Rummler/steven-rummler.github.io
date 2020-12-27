@@ -1,0 +1,107 @@
+.card {
+  padding: 5px;
+  border-radius: 5px;
+  background: #444;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin-block: 10px;
+  font-size: 2em;
+  text-transform: uppercase;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  margin: 0;
+  padding: 2px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  user-select: none;
+  color: #333;
+}
+
+thead tr {
+  cursor: pointer;
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+}
+
+tr {
+  padding: 5px;
+}
+
+th {
+  padding: 10px;
+  text-align: center;
+}
+
+.data:hover {
+  background: #ddd;
+}
+
+td a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+}
+
+@media screen and (min-width: 600px) {
+  tr {
+    height: 1px;
+  }
+  td {
+    padding: 0px;
+    height: inherit;
+  }
+  td a {
+    height: 100%;
+  }
+  tbody tr:nth-child(even) {
+    background: #f4f4f4;
+  }
+  tbody tr:nth-child(odd) {
+    background: #fff;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .card table {
+    border: 0;
+  }
+
+  .card table thead {
+    display: none;
+  }
+
+  .card table tr {
+    margin-bottom: 20px;
+    display: block;
+    background-color: white;
+    /* border-bottom: 2px solid #ddd;
+    box-shadow: 2px 2px 1px #dadada; */
+  }
+
+  .card table td {
+    display: block;
+    text-align: center;
+  }
+
+  .card table td:last-child {
+    border-bottom: 0;
+  }
+
+  .card table td::before {
+    content: attr(data-label);
+    border-bottom: 1px solid #ddd;
+    /* width: 100%; */
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #888;
+  }
+}
