@@ -48,6 +48,14 @@ projects = [
     "",
     "Personal",
   ],
+  [
+    "https://mappings.stevenrummler.com",
+    "Fabric Mappings",
+    "Displays useful data about obfuscated Minecraft code as a tool for modders",
+    "HTML/CSS/Javascript",
+    "Python/Flask/SQLite",
+    "Personal",
+  ],
 ];
 
 let thead = document.getElementById("thead");
@@ -64,12 +72,17 @@ let tbody = document.getElementById("tbody");
 projects.forEach((project) => {
   let row = document.createElement("tr");
   row.classList.add("data");
+  row.classList.add(project[project.length - 1]);
   let link = project[0];
   for (let i = 1; i < project.length; i++) {
     let cell = document.createElement("td");
-    cell.setAttribute("data-label", labels[i - 1]);
-    let text = document.createElement("a");
-    text.href = link;
+    let text;
+    if (i == 1) {
+      text = document.createElement("a");
+      text.href = link;
+    } else {
+      text = document.createElement("p");
+    }
     text.innerText = project[i];
     cell.appendChild(text);
     row.appendChild(cell);
@@ -77,51 +90,68 @@ projects.forEach((project) => {
   tbody.appendChild(row);
 });
 
-const headers = table.querySelectorAll("th");
-const tableBody = table.querySelector("tbody");
-const rows = tableBody.querySelectorAll("tr");
-const directions = Array.from(headers).map(function (header) {
-  return "";
+$("#table").DataTable({
+  searching: false,
+  paging: false,
+  info: false,
+  order: [[0, "asc"]],
+  autoWidth: false,
+  columnDefs: [
+    { width: "15%", targets: 0 },
+    { width: "40%", targets: 1 },
+    { width: "15%", targets: 2 },
+    { width: "15%", targets: 3 },
+    { width: "15%", targets: 4 },
+  ],
+  fixedHeader: true,
+  responsive: true,
 });
 
-const sortTable = function (index) {
-  // Get the current direction
-  const direction = directions[index] || "asc";
+// const headers = table.querySelectorAll("th");
+// const tableBody = table.querySelector("tbody");
+// const rows = tableBody.querySelectorAll("tr");
+// const directions = Array.from(headers).map(function (header) {
+//   return "";
+// });
 
-  // A factor based on the direction
-  const multiplier = direction === "asc" ? 1 : -1;
+// const sortTable = function (index) {
+//   // Get the current direction
+//   const direction = directions[index] || "asc";
 
-  // Clone the rows
-  const newRows = Array.from(rows);
+//   // A factor based on the direction
+//   const multiplier = direction === "asc" ? 1 : -1;
 
-  // Sort rows by the content of cells
-  newRows.sort(function (rowA, rowB) {
-    // Get the content of cells
-    const a = rowA.querySelectorAll("td")[index].firstChild.innerText;
-    const b = rowB.querySelectorAll("td")[index].firstChild.innerText;
+//   // Clone the rows
+//   const newRows = Array.from(rows);
 
-    switch (true) {
-      case a > b:
-        return 1 * multiplier;
-      case a < b:
-        return -1 * multiplier;
-      case a === b:
-        return 0;
-    }
-  });
+//   // Sort rows by the content of cells
+//   newRows.sort(function (rowA, rowB) {
+//     // Get the content of cells
+//     const a = rowA.querySelectorAll("td")[index].firstChild.innerText;
+//     const b = rowB.querySelectorAll("td")[index].firstChild.innerText;
 
-  // Remove old rows
-  [].forEach.call(rows, function (row) {
-    tableBody.removeChild(row);
-  });
+//     switch (true) {
+//       case a > b:
+//         return 1 * multiplier;
+//       case a < b:
+//         return -1 * multiplier;
+//       case a === b:
+//         return 0;
+//     }
+//   });
 
-  // Append new row
-  newRows.forEach(function (newRow) {
-    tableBody.appendChild(newRow);
-  });
+//   // Remove old rows
+//   [].forEach.call(rows, function (row) {
+//     tableBody.removeChild(row);
+//   });
 
-  // Reverse the direction
-  directions[index] = direction === "asc" ? "desc" : "asc";
-};
+//   // Append new row
+//   newRows.forEach(function (newRow) {
+//     tableBody.appendChild(newRow);
+//   });
 
-sortTable(0);
+//   // Reverse the direction
+//   directions[index] = direction === "asc" ? "desc" : "asc";
+// };
+
+// sortTable(0);
