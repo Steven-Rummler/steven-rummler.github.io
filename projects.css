@@ -18,33 +18,33 @@ body {
   text-decoration: none;
   margin: 5px;
   transition: transform .2s;
-  min-width: 200px;
-  min-height: 200px;
+  min-width: 250px;
+  min-height: 250px;
   border-radius: 20px;
   position: relative;
   background-repeat: repeat-x;
-  background-size: 50% 100%;
   background-position: 0 50;
-  background: conic-gradient(from 100deg at 25% 25%, #d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
-      #d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
-      #d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
-      #d7d7d7, #c3c3c3, #cccccc, #c6c6c6, #d7d7d7);
   overflow: hidden;
   box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+  transition-timing-function: cubic-bezier(0.555, 0.095, 0.915, 0.385);
+  transition-duration: 200ms;
+  border: 1px solid #d7d7d7;
+  backface-visibility: hidden;
 }
 
 .panel:hover {
-  transform: scale(1.01);
+  transform: scale(1.02);
+  transition-duration: 10ms;
 }
 
 .cell {
   background-attachment: fixed;
   background-image: linear-gradient(105deg,
-      rgba(255, 255, 255, 0.0) 25%,
-      rgba(255, 255, 255, 0.4) 50%,
-      rgba(255, 255, 255, 0.0) 60%);
-  background-size: 100vw 100vh;
-  animation: shimmer 8s infinite linear;
+      rgba(255, 255, 255, 0.0) 45%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.0) 51%);
+  background-size: 10000px 10000px;
+  animation: shimmer 10s infinite linear;
   flex: 1;
   display: flex;
   align-items: center;
@@ -52,11 +52,11 @@ body {
 
 @keyframes shimmer {
   0% {
-    background-position: -100vw 0;
+    background-position: -10000px 0;
   }
 
   100% {
-    background-position: 100vw 0;
+    background-position: 10000px 0;
   }
 }
 
@@ -69,6 +69,11 @@ body {
 
 .title {
   text-transform: uppercase;
+  font-size: large;
+}
+
+.description {
+  padding: 20px;
 }
 
 .tools {

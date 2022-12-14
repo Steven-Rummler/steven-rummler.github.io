@@ -44,9 +44,15 @@ projects = [
 
 const container = document.getElementById('container');
 
-projects.forEach((project, index) => {
+projects.forEach(project => {
   const panel = document.createElement("a");
   panel.href = project.link;
+  const x = Math.random() * 20 + 20 + (Math.random() >= .5 ? 40 : 0);
+  const y = Math.random() * 20 + 20 + (Math.random() >= .5 ? 40 : 0);
+  panel.style.background = `conic-gradient(from 100deg at ` + x + `% ` + y + `%, #d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
+    #d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
+    #d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
+    #d7d7d7, #c3c3c3, #cccccc, #c6c6c6, #d7d7d7)`;
   panel.classList.add("panel");
 
   const titleCell = document.createElement("div");
@@ -111,7 +117,7 @@ function sizeBoxes() {
   });
 
   const possibleGrids = grids.filter(grid =>
-    width / grid.factor > 220 && height / grid.otherSide > 220
+    width / grid.factor > 275 && height / grid.otherSide > 275
   );
 
   if (possibleGrids.length === 0) {
