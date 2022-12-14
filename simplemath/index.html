@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        width: 100%;
+        text-align: center;
+        margin: 0px;
+      }
+      .check {
+        cursor: pointer;
+      }
+      .factor {
+        width: 5em;
+      }
+      #start {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Simple Math Quiz Builder</h2>
+
+    <form
+      name="setup"
+      action="problems.html"
+      method="GET"
+      onsubmit="return validateForm()"
+    >
+      <input type="checkbox" class="check" id="add" name="add" checked />
+      <label for="add">Add</label>
+      <input type="checkbox" class="check" id="subtract" name="subtract" />
+      <label for="subtract">Subtract</label>
+      <input type="checkbox" class="check" id="multiply" name="multiply" />
+      <label for="multiply">Multiply</label>
+      <input type="checkbox" class="check" id="divide" name="divide" />
+      <label for="divide">Divide</label>
+      <br /><br />
+      <label for="min">Factor range:</label>
+      <input type="number" class="factor" id="min" name="min" value="0" />
+      to
+      <input
+        type="number"
+        class="factor"
+        id="max"
+        name="max"
+        value="9"
+      /><br /><br />
+      <input type="submit" id="start" value="Start" />
+    </form>
+    <br />
+    <a id="github" href="https://github.com/Steven-Rummler/SimpleMathQuiz"
+      >GitHub</a
+    >
+
+    <script>
+      function validateForm() {
+        var a = document.forms["setup"]["add"].checked;
+        var s = document.forms["setup"]["subtract"].checked;
+        var m = document.forms["setup"]["multiply"].checked;
+        var d = document.forms["setup"]["divide"].checked;
+
+        var min = document.forms["setup"]["min"].value;
+        var max = document.forms["setup"]["max"].value;
+
+        if (!(a | s | m | d)) {
+          alert("Please select at least one problem type.");
+          return false;
+        } else if (min.length == 0 || max.length == 0) {
+          alert("Please input factor range.");
+          return false;
+        } else if (min > max) {
+          alert("Minimum must be less than or equal to maximum.");
+          return false;
+        }
+      }
+    </script>
+  </body>
+</html>

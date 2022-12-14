@@ -1,18 +1,18 @@
 projects = [
   {
-    link: "https://stevenrummler.com/kerbal/index.html",
+    link: "../kerbal",
     title: "Kerbal Science Analyzer",
     description: "Analyzes game files in browser, displays charts and recommendations",
     tools: ["HTML", "CSS", "JavaScript"]
   },
   {
-    link: "https://simplemath.stevenrummler.com",
+    link: "../simplemath",
     title: "Math Flash Cards",
     description: "Generates random simple math problems in flash card format",
     tools: ["HTML", "CSS", "JavaScript"]
   },
   {
-    link: "https://starwars.stevenrummler.com/",
+    link: "https://github.com/Steven-Rummler/cp4",
     title: "Star Wars Codex",
     description: "Simple website with data display and management",
     tools: ["HTML", "CSS", "JavaScript", "Vue", "Node", "Mongo"]
@@ -30,7 +30,7 @@ projects = [
     tools: ["Python"]
   },
   {
-    link: "https://covid.stevenrummler.com",
+    link: "../covid",
     title: "Covid Perspective",
     description: "Covid data showing US states and other countries in the same list",
     tools: ["HTML", "CSS", "JavaScript"]

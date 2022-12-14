@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Covid State Perspective</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.dataTables.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.dataTables.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <table id="table">
+      <thead>
+        <tr>
+          <th class="name">Name</th>
+          <th>Deaths per Million</th>
+          <th>Confirmed Cases per Million</th>
+          <th>Deaths</th>
+          <th>Confirmed Cases</th>
+          <th>Population</th>
+        </tr>
+      </thead>
+      <tbody id="content"></tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+    <script src="country_pop.js"></script>
+    <script src="state_pop.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

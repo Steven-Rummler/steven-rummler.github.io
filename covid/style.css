@@ -1,0 +1,27 @@
+.State.odd {
+  background-color: rgba(144, 238, 144, 0.3) !important;
+}
+.State.even {
+  background-color: rgba(144, 238, 144, 0.2) !important;
+}
+.Country.odd {
+  background-color: rgba(173, 216, 230, 0.3) !important;
+}
+.Country.even {
+  background-color: rgba(173, 216, 230, 0.2) !important;
+}
+table {
+  border: 1px solid black;
+  border-radius: 5px 5px 0px 0px !important;
+  overflow: hidden;
+}
+th {
+  font-family: sans-serif;
+  background-color: rgba(248, 248, 248, 1) !important;
+}
+td {
+  text-align: center;
+}
+.name {
+  text-align: left;
+}

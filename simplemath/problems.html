@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="box"><p id="problem"></p></div>
+
+    <script>
+      let data = new URLSearchParams(window.location.search);
+      let add = data.get("add");
+      let subtract = data.get("subtract");
+      let multiply = data.get("multiply");
+      let divide = data.get("divide");
+      let min = data.get("min");
+      let max = data.get("max");
+      console.log(add, subtract, multiply, divide, min, max);
+
+      let current_function = 0;
+      let functions = [add, subtract, multiply, divide];
+      let problem = "";
+      let solution = "";
+      let solved = false;
+
+      document.body.addEventListener("click", flip, true);
+
+      function flip() {
+        if (solved) {
+          newProblem();
+        } else {
+          showAnswer();
+        }
+        solved = !solved;
+      }
+
+      function showAnswer() {
+        document.getElementById("problem").innerHTML = solution;
+      }
+
+      function newProblem() {
+        do {
+          current_function = (current_function + 1) % 4;
+        } while (functions[current_function] == null);
+        let factor1 = Math.floor(Math.random() * (max - min + 1) + min);
+        let factor2 = Math.floor(Math.random() * (max - min + 1) + min);
+        if (current_function == 0) {
+          let result = factor1 + factor2;
+          problem = factor1 + " + " + factor2;
+          solution = factor1 + " + " + factor2 + " = " + result;
+        } else if (current_function == 1) {
+          let result = factor1 + factor2;
+          problem = result + " - " + factor1;
+          solution = result + " - " + factor1 + " = " + factor2;
+        } else if (current_function == 2) {
+          let result = factor1 * factor2;
+          problem = factor1 + " × " + factor2;
+          solution = factor1 + " × " + factor2 + " = " + result;
+        } else {
+          if (factor1 == 0) {
+            factor1 = 1;
+          }
+          let result = factor1 * factor2;
+          problem = result + " ÷ " + factor1;
+          solution = result + " ÷ " + factor1 + " = " + factor2;
+        }
+        document.getElementById("problem").innerHTML = problem;
+      }
+
+      newProblem();
+    </script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      #box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 12em;
+        overflow: hidden;
+      }
+      #problem {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      @media only screen and (min-width: 800px) and (max-width: 1000px) {
+        #box {
+          font-size: 10em;
+        }
+      }
+      @media only screen and (min-width: 700px) and (max-width: 800px) {
+        #box {
+          font-size: 8em;
+        }
+      }
+      @media only screen and (min-width: 520px) and (max-width: 700px) {
+        #box {
+          font-size: 6em;
+        }
+      }
+      @media only screen and (max-width: 520px) {
+        #box {
+          font-size: 4em;
+        }
+      }
+    </style>
+  </body>
+</html>
