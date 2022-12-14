@@ -1,0 +1,109 @@
+body {
+  background-image: url("background.png");
+  background-repeat: repeat-y;
+  background-attachment: fixed;
+  background-size: 100%;
+  margin: 0;
+}
+
+.start {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: aliceblue;
+  transition: 1s;
+  transition-delay: 0.5s;
+}
+
+@media only screen and (max-width: 520px) {
+  .start {
+    flex-direction: column;
+  }
+  #bob {
+    margin-bottom: 2em;
+  }
+  .loaded #bob {
+    margin-right: 2em;
+    margin-bottom: 0;
+  }
+  .chart {
+    overflow-x: scroll;
+  }
+}
+
+@media only screen and (min-width: 520px) {
+  #bob {
+    margin-right: 2em;
+  }
+}
+
+.loaded {
+  height: 8vh;
+  opacity: 0.8;
+  flex-direction: row;
+}
+
+#bob {
+  max-height: 80%;
+  height: auto;
+  width: auto;
+}
+
+#results {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.tile {
+  max-width: 500px;
+  overflow: hidden;
+  opacity: 0.8;
+}
+
+.title {
+  text-align: center;
+  width: auto;
+  margin: 10px;
+  margin-bottom: 2px;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-radius: 1em 1em 0 0;
+  background-color: aliceblue;
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.chart {
+  margin: 10px;
+  margin-top: 0;
+  background-color: aliceblue;
+  padding: 0;
+  border-radius: 0 0 1em 1em;
+  text-align: center;
+}
+
+.chart p {
+  margin-bottom: 0;
+  margin-block: 0;
+  padding: 1em;
+}
+
+#github {
+  display: block;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background-color: aliceblue;
+  color: black;
+  text-decoration: none;
+  padding: 5px;
+  border-radius: 4px;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+}

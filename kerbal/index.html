@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://uicdn.toast.com/tui.chart/latest/tui-chart.min.css"
+    />
+    <link rel="stylesheet" href="./kerbal.css" />
+    <script src="https://uicdn.toast.com/tui.chart/latest/tui-chart-all.min.js"></script>
+
+    <title>Kerbal Science Toolkit</title>
+  </head>
+
+  <body>
+    <div id="input" class="start">
+      <img id="bob" src="./kerbal.gif" />
+      <span id="buttons">
+        <input type="file" id="file-selector" accept=".sfs" /> <br /><br />
+        <button onclick="useExample()">Use Example File</button>
+      </span>
+    </div>
+    <div id="results"></div>
+
+    <a id="github" href="https://github.com/Steven-Rummler/Kerbal">GitHub</a>
+
+    <script src="./dataset.js"></script>
+    <script src="./lists.js"></script>
+    <script src="./process_file.js"></script>
+    <script src="./aggregate.js"></script>
+    <script src="./build_display.js"></script>
+    <script src="./display_recommender.js"></script>
+    <script src="./display_charts.js"></script>
+    <script src="./button_listeners.js"></script>
+  </body>
+</html>

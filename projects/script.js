@@ -1,6 +1,6 @@
 projects = [
   {
-    link: "https://kerbal.stevenrummler.com",
+    link: "https://stevenrummler.com/kerbal/index.html",
     title: "Kerbal Science Analyzer",
     description: "Analyzes game files in browser, displays charts and recommendations",
     tools: ["HTML", "CSS", "JavaScript"]
