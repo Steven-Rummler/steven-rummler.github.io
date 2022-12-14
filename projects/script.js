@@ -35,7 +35,7 @@ projects = [
     description: "Covid data showing US states and other countries in the same list",
     tools: ["HTML", "CSS", "JavaScript"]
   }, {
-    link: "https://mappings.stevenrummler.com",
+    link: "../mappings",
     title: "Fabric Mappings",
     description: "Displays useful data about obfuscated Minecraft code as a tool for modders",
     tools: ["HTML", "CSS", "Javascript", "Python", "Flask", "SQLite"]
