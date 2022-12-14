@@ -1,157 +1,174 @@
-labels = ["Title", "Description", "Front End", "Back End", "Category"];
 projects = [
-  [
-    "https://kerbal.stevenrummler.com",
-    "Kerbal Science Analyzer",
-    "Analyzes game files in browser, displays charts and recommendations",
-    "HTML/CSS/JavaScript",
-    "",
-    "Personal",
-  ],
-  [
-    "https://simplemath.stevenrummler.com",
-    "Math Flash Cards",
-    "Generates random simple math problems in flash card format",
-    "HTML/CSS/JavaScript",
-    "",
-    "Personal",
-  ],
-  [
-    "https://starwars.stevenrummler.com/",
-    "Star Wars Codex",
-    "Simple website with data display and management",
-    "HTML/CSS/JS/Vue",
-    "Node/Mongo",
-    "Coursework",
-  ],
-  [
-    "https://github.com/Steven-Rummler/FamilyMap",
-    "Family Map",
-    "Complete Android application with custom Java backend",
-    "Android/Java",
-    "Java",
-    "Coursework",
-  ],
-  [
-    "https://github.com/Steven-Rummler/QualtricsDataCompilation",
-    "Survey Data Compiler",
-    "Aggregates results from a group of Qualtrics surveys into summary reports",
-    "",
-    "Python",
-    "Personal",
-  ],
-  [
-    "https://covid.stevenrummler.com",
-    "Covid Perspective",
-    "Covid data showing US states and other countries in the same list",
-    "HTML/CSS/Javascript",
-    "",
-    "Personal",
-  ],
-  [
-    "https://mappings.stevenrummler.com",
-    "Fabric Mappings",
-    "Displays useful data about obfuscated Minecraft code as a tool for modders",
-    "HTML/CSS/Javascript",
-    "Python/Flask/SQLite",
-    "Personal",
-  ],
+  {
+    link: "https://kerbal.stevenrummler.com",
+    title: "Kerbal Science Analyzer",
+    description: "Analyzes game files in browser, displays charts and recommendations",
+    tools: ["HTML", "CSS", "JavaScript"]
+  },
+  {
+    link: "https://simplemath.stevenrummler.com",
+    title: "Math Flash Cards",
+    description: "Generates random simple math problems in flash card format",
+    tools: ["HTML", "CSS", "JavaScript"]
+  },
+  {
+    link: "https://starwars.stevenrummler.com/",
+    title: "Star Wars Codex",
+    description: "Simple website with data display and management",
+    tools: ["HTML", "CSS", "JavaScript", "Vue", "Node", "Mongo"]
+  },
+  {
+    link: "https://github.com/Steven-Rummler/FamilyMap",
+    title: "Family Map",
+    description: "Complete Android application with custom Java backend",
+    tools: ["Android", "Java"]
+  },
+  {
+    link: "https://github.com/Steven-Rummler/QualtricsDataCompilation",
+    title: "Survey Data Compiler",
+    description: "Aggregates results from a group of Qualtrics surveys into summary reports",
+    tools: ["Python"]
+  },
+  {
+    link: "https://covid.stevenrummler.com",
+    title: "Covid Perspective",
+    description: "Covid data showing US states and other countries in the same list",
+    tools: ["HTML", "CSS", "JavaScript"]
+  }, {
+    link: "https://mappings.stevenrummler.com",
+    title: "Fabric Mappings",
+    description: "Displays useful data about obfuscated Minecraft code as a tool for modders",
+    tools: ["HTML", "CSS", "Javascript", "Python", "Flask", "SQLite"]
+  }
 ];
 
-let thead = document.getElementById("thead");
-let row = document.createElement("tr");
-for (let i = 0; i < labels.length; i++) {
-  let th = document.createElement("th");
-  th.setAttribute("onclick", "sortTable(" + i + ")");
-  th.innerText = labels[i];
-  row.appendChild(th);
-}
-thead.appendChild(row);
+const container = document.getElementById('container');
 
-let tbody = document.getElementById("tbody");
-projects.forEach((project) => {
-  let row = document.createElement("tr");
-  row.classList.add("data");
-  row.classList.add(project[project.length - 1]);
-  let link = project[0];
-  for (let i = 1; i < project.length; i++) {
-    let cell = document.createElement("td");
-    let text;
-    if (i == 1) {
-      text = document.createElement("a");
-      text.href = link;
+projects.forEach((project, index) => {
+  const panel = document.createElement("a");
+  panel.href = project.link;
+  panel.classList.add("panel");
+
+  const titleCell = document.createElement("div");
+  titleCell.classList.add("cell");
+  const titleText = document.createElement("div");
+  titleText.classList.add("text");
+  titleText.innerText = project.title;
+  titleText.classList.add("title");
+  titleCell.appendChild(titleText);
+  panel.appendChild(titleCell);
+
+  const descriptionCell = document.createElement("div");
+  descriptionCell.classList.add("cell");
+  const descriptionText = document.createElement("div");
+  descriptionText.classList.add("text");
+  descriptionText.innerText = project.description;
+  descriptionText.classList.add("description");
+  descriptionCell.appendChild(descriptionText);
+  panel.appendChild(descriptionCell);
+
+  const toolsCell = document.createElement("div");
+  toolsCell.classList.add("cell");
+  toolsCell.classList.add("tools");
+  project.tools.forEach(tool => {
+    const toolsText = document.createElement("div");
+    toolsText.classList.add("text");
+    toolsText.classList.add("tool");
+    toolsText.innerText = tool;
+    toolsCell.appendChild(toolsText);
+  });
+  panel.appendChild(toolsCell);
+
+  container.appendChild(panel);
+});
+
+function sizeBoxes() {
+  const width = window.innerWidth - 42;
+  const height = window.innerHeight - 42;
+  const windowRatio = width / height;
+  const boxesToFit = projects.length;
+
+  const maxBlankSpaces = Math.round(Math.sqrt(boxesToFit));
+
+  const boxCountsToTry = [...Array(maxBlankSpaces + 1).keys()].map(e => e + boxesToFit);
+
+  const grids = [];
+
+  boxCountsToTry.forEach(boxCount => {
+    const factors = findFactors(boxCount);
+    factors.forEach(factor => {
+      const otherSide = boxCount / factor;
+      const ratio = factor / otherSide;
+
+      grids.push({
+        boxCount,
+        factor,
+        otherSide,
+        ratio,
+        offset: Math.abs(ratio - windowRatio)
+      })
+    })
+  });
+
+  const possibleGrids = grids.filter(grid =>
+    width / grid.factor > 220 && height / grid.otherSide > 220
+  );
+
+  if (possibleGrids.length === 0) {
+    if (width > height) {
+      possibleGrids.push({
+        boxCount: boxesToFit,
+        factor: boxesToFit,
+        otherSide: 1,
+        ratio: boxesToFit,
+        offset: 0
+      })
     } else {
-      text = document.createElement("p");
+      possibleGrids.push({
+        boxCount: boxesToFit,
+        factor: 1,
+        otherSide: boxesToFit,
+        ratio: 1 / boxesToFit,
+        offset: 0
+      })
     }
-    text.innerText = project[i];
-    cell.appendChild(text);
-    row.appendChild(cell);
   }
-  tbody.appendChild(row);
-});
 
-$("#table").DataTable({
-  searching: false,
-  paging: false,
-  info: false,
-  order: [[0, "asc"]],
-  autoWidth: false,
-  columnDefs: [
-    { width: "15%", targets: 0 },
-    { width: "40%", targets: 1 },
-    { width: "15%", targets: 2 },
-    { width: "15%", targets: 3 },
-    { width: "15%", targets: 4 },
-  ],
-  fixedHeader: true,
-  responsive: true,
-});
+  possibleGrids.sort((a, b) => a.offset - b.offset);
 
-// const headers = table.querySelectorAll("th");
-// const tableBody = table.querySelector("tbody");
-// const rows = tableBody.querySelectorAll("tr");
-// const directions = Array.from(headers).map(function (header) {
-//   return "";
-// });
+  const bestGrid = possibleGrids[0];
 
-// const sortTable = function (index) {
-//   // Get the current direction
-//   const direction = directions[index] || "asc";
 
-//   // A factor based on the direction
-//   const multiplier = direction === "asc" ? 1 : -1;
+  const boxWidth = width / bestGrid.factor;
+  const boxHeight = height / bestGrid.otherSide;
 
-//   // Clone the rows
-//   const newRows = Array.from(rows);
+  const wideBoxes = boxWidth > boxHeight;
 
-//   // Sort rows by the content of cells
-//   newRows.sort(function (rowA, rowB) {
-//     // Get the content of cells
-//     const a = rowA.querySelectorAll("td")[index].firstChild.innerText;
-//     const b = rowB.querySelectorAll("td")[index].firstChild.innerText;
+  if (wideBoxes) {
+    const boxes = document.getElementsByClassName('panel');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].style.width = (boxHeight - 25).toString() + 'px';
+      boxes[i].style.height = (boxHeight - 25).toString() + 'px';
 
-//     switch (true) {
-//       case a > b:
-//         return 1 * multiplier;
-//       case a < b:
-//         return -1 * multiplier;
-//       case a === b:
-//         return 0;
-//     }
-//   });
+    }
+  } else {
+    const boxes = document.getElementsByClassName('panel');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].style.width = (boxWidth - 25).toString() + 'px';
+      boxes[i].style.height = (boxWidth - 25).toString() + 'px';
 
-//   // Remove old rows
-//   [].forEach.call(rows, function (row) {
-//     tableBody.removeChild(row);
-//   });
+    }
+  }
+}
 
-//   // Append new row
-//   newRows.forEach(function (newRow) {
-//     tableBody.appendChild(newRow);
-//   });
+function findFactors(number) {
+  const factors = [];
+  for (let i = 1; i <= number; i++) {
+    if (number % i === 0) factors.push(i);
+  }
+  return factors;
+}
 
-//   // Reverse the direction
-//   directions[index] = direction === "asc" ? "desc" : "asc";
-// };
+addEventListener('resize', sizeBoxes);
 
-// sortTable(0);
+sizeBoxes();
