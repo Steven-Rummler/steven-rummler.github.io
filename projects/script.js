@@ -12,6 +12,12 @@ projects = [
     tools: ["HTML", "CSS", "JavaScript"]
   },
   {
+    link: "https://play.google.com/store/apps/details?id=com.steven.rummler.Barney",
+    title: "Family History App",
+    description: "Digital version of a family history book",
+    tools: ["React Native"]
+  },
+  {
     link: "https://github.com/Steven-Rummler/cp4",
     title: "Star Wars Codex",
     description: "Simple website with data display and management",
