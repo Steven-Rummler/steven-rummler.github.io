@@ -1,5 +1,11 @@
 projects = [
   {
+    link: "../politesql",
+    title: "PoliteSQL",
+    description: "SQL Formatting Tool that helps queries take a deep breath and calm down",
+    tools: ["HTML", "CSS", "JavaScript"]
+  },
+  {
     link: "../kerbal",
     title: "Kerbal Science Analyzer",
     description: "Analyzes game files in browser, displays charts and recommendations",

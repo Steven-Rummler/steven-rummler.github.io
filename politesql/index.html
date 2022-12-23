@@ -1,0 +1,197 @@
+<head>
+    <title>PoliteSQL</title>
+    <style>
+        html {
+            background-color: #f8f8f8;
+        }
+
+        h1 {
+            display: inline;
+            color: #444444;
+            font-family: 'Consolas', monospace;
+            margin: 10px;
+        }
+
+        h2 {
+            display: inline;
+            color: #444444;
+            font-family: 'Consolas', monospace;
+            font-size: 1em;
+        }
+
+        span {
+            font-family: monospace;
+            font-weight: bolder;
+            text-transform: uppercase;
+            font-size: 1.2em;
+            color: 'black';
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            resize: none;
+            padding: 10px;
+            border: none;
+        }
+
+        div:has(textarea) {
+            width: calc(100vw - 16px);
+            height: calc(50vh - 26px - 1em);
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #444444;
+            overflow: hidden;
+        }
+
+        #sql {
+            font-family: monospace;
+            white-space: pre;
+            background-color: #fff8f8;
+        }
+
+        #formattedSql {
+            font-family: 'Consolas', monospace;
+            background-color: #f8fff8;
+            color: #444444;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>PoliteSQL</h1>
+    <h2>(because <span>all caps</span> is yelling and yelling isn't nice)</h2>
+    <div><textarea name="" id="sql" cols="30" rows="10" oninput="formatSql()" autofocus></textarea></div>
+    <div><textarea name="" id="formattedSql" cols="30" rows="10">Results will be shown here.</textarea></div>
+
+    <script>
+        function useExample() {
+            document.getElementById('sql').value = `select * from(select * from db.table)table1 join database.table2;
+
+WITH expr_list as 'expr_list', subquery as(select * from database.table)
+SELECT DISTINCT column1, column2,column3, 'column4' AS column4 , 'select * from table'
+FROM db.table
+GLOBAL ANY INNER SEMI JOIN( select * from database.table )alias ON table.column = alias.column
+WHERE filter and filter or filter and filter in ('a','b') or filter in( select * from database.table)
+GROUP BY groups
+HAVING filters
+ORDER BY sort
+LIMIT 2
+UNION ALL select * from database.table;
+
+select 1+2 +3+ 4-5*6/(  (7%8)  );`;
+
+            new Promise(resolve => setTimeout(resolve, 50)).then(() => document.getElementById('sql').select());
+        }
+
+        function formatSql() {
+            let query = document.getElementById('sql').value;
+
+            // Remove strings
+            const quoteSegments = query.split('\'');
+            const strings = quoteSegments.filter((_, index) => index % 2 === 1);
+            query = quoteSegments.filter((_, index) => index % 2 === 0).join('\'\'');
+
+            // Clean up spaces
+            query = query.trim(); // Remove leading and trailing spaces
+            query = query.replaceAll(/\s+/g, ' '); // Remove multiple spaces
+
+            query = query.replaceAll(/\s+,/g, ','); // Remove spaces before comma
+            query = query.replaceAll(/,(?!\s)/g, ', '); // Add space after comma
+
+            query = query.replaceAll(/\s+\(/g, '('); // Remove spaces before opening paren
+            query = query.replaceAll(/(?<=[Ff][Rr][Oo][Mm]|[Jj][Oo][Ii][Nn]|[Ii][Nn]|[Aa][Ss])\(/g, ' ('); // Add space before opening paren for certain keywords
+            query = query.replaceAll(/\(\s/g, '('); // Remove spaces after opening paren
+
+            query = query.replaceAll(/\s\)/g, ')'); // Remove spaces before closing paren
+            query = query.replaceAll(/\)(?![\s;])/g, ') '); // Add space after closing paren
+
+            query = query.replaceAll(/\(\s+\(/g, '(('); // Remove spaces before closing paren
+            query = query.replaceAll(/\)\s+\)/g, '))'); // Remove spaces before closing paren
+
+            query = query.replaceAll(/\s?\+\s?/g, ' + ') // Add spaces around plus
+            query = query.replaceAll(/\s?\-\s?/g, ' - ') // Add spaces around minus
+            query = query.replaceAll(/\s?\*\s?/g, ' * ') // Add spaces around times
+            query = query.replaceAll(/\s?\/\s?/g, ' / ') // Add spaces around over
+            query = query.replaceAll(/\s?\%\s?/g, ' % ') // Add spaces around mod
+
+            query = query.replaceAll(/;\s*/g, ';\n\n'); // Add newlines after semicolon
+
+            // Handle keywords
+            const indentKeywords = ['with', 'select', 'from', 'where', 'group by', 'having', 'order by', 'union', 'limit'];
+            const minorKeywords = ['as', 'distinct', 'global', 'on', 'and', 'or', 'all'];
+            const joinOptions = [
+                ['global'],
+                ['any', 'all', 'asof'],
+                ['inner', 'left', 'right', 'full', 'cross'],
+                ['outer', 'semi', 'anti'],
+                ['join']
+            ];
+            const allKeywords = [...indentKeywords, ...minorKeywords, ...joinOptions.flat()];
+            allKeywords.forEach(keyword => {
+                // Lowercase
+                const keywordRegex = keyword.split('').map(letter => '[' + letter.toUpperCase() + letter + ']').join('');
+                const keywordRegexSpacesOrParensAround = '\\b' + keywordRegex + '\\b';
+                const keywordMatch = new RegExp(keywordRegexSpacesOrParensAround, 'g');
+                query = query.replaceAll(keywordMatch, keyword);
+
+                if (indentKeywords.includes(keyword)) {
+                    // New Lines
+                    const keywordRegexSpacesOrParensAfter = keywordRegex + '\\b';
+                    const spaceBeforeKeywordRegex = '\\s(?=' + keywordRegexSpacesOrParensAfter + ')';
+                    const spaceBeforeKeywordMatch = new RegExp(spaceBeforeKeywordRegex, 'g');
+                    query = query.replaceAll(spaceBeforeKeywordMatch, '\n');
+
+                    // Clean up split keywords
+                    const splitKeywordRegex = keyword.replaceAll(' ', '\\s+');
+                    const splitKeywordMatch = new RegExp(splitKeywordRegex, 'g');
+                    query = query.replaceAll(splitKeywordMatch, keyword);
+                }
+            });
+            // Handle newlines for joins
+            const queryLinesJoins = query.split('\n');
+            queryLinesJoins.forEach((queryLine, index, queryLines) => {
+                if (queryLine.includes('join')) {
+                    const words = queryLine.split(' ');
+                    const joinIndex = words.findIndex(e => e === 'join');
+                    if (joinIndex > 0) {
+                        let newLineIndex = joinIndex;
+                        let validJoinPrefixes = true;
+                        while (newLineIndex > 0 && validJoinPrefixes) {
+                            if (joinOptions.flat().includes(words[newLineIndex - 1])) newLineIndex -= 1;
+                            else validJoinPrefixes = false;
+                        }
+                        words[newLineIndex] = '\n' + words[newLineIndex];
+                        queryLines[index] = words.join(' ');
+                    }
+                }
+            });
+            query = queryLinesJoins.join('\n');
+
+            // Indentation
+            const queryLinesIndent = query.split('\n');
+            let indentLevel = 0;
+            queryLinesIndent.forEach((queryLine, index, queryLines) => {
+                queryLines[index] = '  '.repeat(indentLevel) + queryLine;
+                indentLevel += queryLine.split('(').length - 1;
+                indentLevel -= queryLine.split(')').length - 1;
+            });
+            query = queryLinesIndent.join('\n');
+
+            // Replace strings
+            strings.forEach(string => {
+                query = query.replace('\'\'', '\'' + string + '\'');
+            })
+
+            document.getElementById('formattedSql').value = query;
+        }
+
+        useExample();
+        formatSql();
+
+        addEventListener('paste', () => {
+            formatSql();
+            new Promise(resolve => setTimeout(resolve, 50)).then(() => document.getElementById('formattedSql').select());
+        })
+    </script>
+</body>
