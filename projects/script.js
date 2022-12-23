@@ -18,6 +18,17 @@ projects = [
     tools: ["HTML", "CSS", "JavaScript"]
   },
   {
+    link: "../covid",
+    title: "Covid Perspective",
+    description: "Covid data showing US states and other countries in the same list",
+    tools: ["HTML", "CSS", "JavaScript"]
+  }, {
+    link: "../mappings",
+    title: "Fabric Mappings",
+    description: "Displays useful data about obfuscated Minecraft code as a tool for modders",
+    tools: ["HTML", "CSS", "Javascript", "Python", "Flask", "SQLite"]
+  },
+  {
     link: "https://play.google.com/store/apps/details?id=com.steven.rummler.Barney",
     title: "Family History App",
     description: "Digital version of a family history book",
@@ -40,17 +51,6 @@ projects = [
     title: "Survey Data Compiler",
     description: "Aggregates results from a group of Qualtrics surveys into summary reports",
     tools: ["Python"]
-  },
-  {
-    link: "../covid",
-    title: "Covid Perspective",
-    description: "Covid data showing US states and other countries in the same list",
-    tools: ["HTML", "CSS", "JavaScript"]
-  }, {
-    link: "../mappings",
-    title: "Fabric Mappings",
-    description: "Displays useful data about obfuscated Minecraft code as a tool for modders",
-    tools: ["HTML", "CSS", "Javascript", "Python", "Flask", "SQLite"]
   }
 ];
 
