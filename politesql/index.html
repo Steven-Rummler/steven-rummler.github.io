@@ -79,7 +79,11 @@ ORDER BY sort
 LIMIT 2
 UNION ALL select * from database.table;
 
-select 1+2 +3+ 4-5*6/(  (7%8)  );`;
+select 1+2 +3+ 4-5*6/(  (7%8)  );
+
+select '', 'a', 'abcd efg';
+
+select avg(column) OVER (PARTITION BY column ORDER BY column RANGE BETWEEN 1 PRECEDING AND 2 FOLLOWING);`;
 
             new Promise(resolve => setTimeout(resolve, 50)).then(() => document.getElementById('sql').select());
         }
@@ -88,6 +92,7 @@ select 1+2 +3+ 4-5*6/(  (7%8)  );`;
             let query = document.getElementById('sql').value;
 
             // Remove strings
+            query = query.replaceAll('\'\'', 'emptystringplaceholder');
             const quoteSegments = query.split('\'');
             const strings = quoteSegments.filter((_, index) => index % 2 === 1);
             query = quoteSegments.filter((_, index) => index % 2 === 0).join('\'\'');
@@ -100,7 +105,7 @@ select 1+2 +3+ 4-5*6/(  (7%8)  );`;
             query = query.replaceAll(/,(?!\s)/g, ', '); // Add space after comma
 
             query = query.replaceAll(/\s+\(/g, '('); // Remove spaces before opening paren
-            query = query.replaceAll(/(?<=[Ff][Rr][Oo][Mm]|[Jj][Oo][Ii][Nn]|[Ii][Nn]|[Aa][Ss])\(/g, ' ('); // Add space before opening paren for certain keywords
+            query = query.replaceAll(/(?<=[Ff][Rr][Oo][Mm]|[Jj][Oo][Ii][Nn]|[Ii][Nn]|[Aa][Ss]|[Oo][Vv][Ee][Rr])\(/g, ' ('); // Add space before opening paren for certain keywords
             query = query.replaceAll(/\(\s/g, '('); // Remove spaces after opening paren
 
             query = query.replaceAll(/\s\)/g, ')'); // Remove spaces before closing paren
@@ -119,7 +124,8 @@ select 1+2 +3+ 4-5*6/(  (7%8)  );`;
 
             // Handle keywords
             const indentKeywords = ['with', 'select', 'from', 'where', 'group by', 'having', 'order by', 'union', 'limit'];
-            const minorKeywords = ['as', 'distinct', 'global', 'on', 'and', 'or', 'all'];
+            const minorKeywords = ['as', 'distinct', 'global', 'on', 'and', 'or', 'all',
+                'over', 'partition by', 'rows', 'range', 'between', 'preceding', 'following'];
             const joinOptions = [
                 ['global'],
                 ['any', 'all', 'asof'],
@@ -182,6 +188,10 @@ select 1+2 +3+ 4-5*6/(  (7%8)  );`;
             strings.forEach(string => {
                 query = query.replace('\'\'', '\'' + string + '\'');
             })
+            query = query.replaceAll('emptystringplaceholder', '\'\'');
+
+            // Final Trim
+            query = query.trim(); // Remove leading and trailing spaces
 
             document.getElementById('formattedSql').value = query;
         }
