@@ -6,6 +6,12 @@ projects = [
     tools: ["HTML", "CSS", "JavaScript"]
   },
   {
+    link: "../gitdata",
+    title: "gitdata",
+    description: "Converts git log output to CSV for analysis",
+    tools: ["Python"]
+  },
+  {
     link: "../kerbal",
     title: "Kerbal Science Analyzer",
     description: "Analyzes game files in browser, displays charts and recommendations",
