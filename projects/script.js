@@ -1,5 +1,11 @@
 projects = [
   {
+    link: "https://play.google.com/store/apps/details?id=com.stevenrummler.caloric",
+    title: "Caloric",
+    description: "Calorie-logging app with data visualization",
+    tools: ["React Native"]
+  },
+  {
     link: "../politesql",
     title: "PoliteSQL",
     description: "SQL Formatting Tool that helps queries take a deep breath and calm down",
