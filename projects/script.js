@@ -6,6 +6,12 @@ projects = [
     tools: ["React Native"]
   },
   {
+    link: "https://steven-flashcards.vercel.app/",
+    title: "Flashcards",
+    description: "Flashcard app with browser persistence",
+    tools: ["Next.js", "TypeScript"]
+  },
+  {
     link: "../politesql",
     title: "PoliteSQL",
     description: "SQL Formatting Tool that helps queries take a deep breath and calm down",
