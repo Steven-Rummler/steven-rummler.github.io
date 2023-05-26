@@ -3,18 +3,22 @@
   img {
     max-width: 100%;
   }
+
   img:hover {
     max-width: 102%;
   }
 }
+
 @media (max-aspect-ratio: 3/2) {
   img {
     max-height: 100%;
   }
+
   img:hover {
     max-height: 102%;
   }
 }
+
 /* Window Size for Grid */
 @media (max-width: 900px) {
   .tile {
@@ -24,64 +28,52 @@
     margin-top: 2px;
     left: 2px;
   }
+
   body:last-child {
     margin-bottom: 2px;
   }
 }
+
 @media (min-width: 900px) {
   .tile {
     position: absolute;
     width: calc(50% - 3px);
     height: calc(50% - 3px);
   }
+
   #linkedin {
     left: 2px;
     top: 2px;
   }
+
   #resume {
     right: 2px;
     top: 2px;
   }
+
   #projects {
     left: 2px;
     bottom: 2px;
   }
+
   #github {
     right: 2px;
     bottom: 2px;
   }
 }
-/* Window Size for Name */
-@media (min-width: 1520px) {
-  #name {
-    font-size: 6em;
-  }
-}
-@media (min-width: 1270px) and (max-width: 1520px) {
-  #name {
-    font-size: 5em;
-  }
-}
-@media (min-width: 1020px) and (max-width: 1270px) {
-  #name {
-    font-size: 4em;
-  }
-}
-@media (max-width: 900px) {
-  #name {
-    display: none;
-  }
-}
+
 /* General Styles */
 body {
   margin: 0px;
 }
+
 .tile {
   display: block;
   overflow: hidden;
   user-select: none;
   background-color: black;
 }
+
 img {
   object-fit: cover;
   margin: auto;
@@ -89,9 +81,11 @@ img {
   /* filter: blur(3px);
     -webkit-filter: blur(3px); */
 }
+
 img:hover {
   opacity: 90%;
 }
+
 h1 {
   color: white;
   font-size: 3em;
@@ -100,9 +94,4 @@ h1 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-}
-#name {
-  pointer-events: none;
-  font-family: sans-serif;
-  padding-bottom: 20px;
 }
