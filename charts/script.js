@@ -1,4 +1,5 @@
-const embed = 'https:/stevenrummler.com/charts/embed';
+// const embed = 'http://localhost:5500/charts/embed.html';
+const embed = 'https://stevenrummler.com/charts/embed';
 let engine = "apexcharts";
 let data = "Undergraduate certificate:17976,Associates degree:25608,Bachelor's degree:32568,Master's degree:48468,Doctoral degree:53112";
 let format = "currency";
@@ -29,13 +30,10 @@ document.querySelector("#width").addEventListener("change", () => {
 
 function update() {
   const newURL = `${embed}?engine=${engine}&data=${data}&format=${format}`;
-  console.log(`Updating code and iframe to ${newURL}`);
   document.querySelector("#dynamic").src = newURL;
   document.querySelector("#dynamic").height = `${height}px`;
   document.querySelector("#dynamic").width = `${width}px`;
-  document.querySelector('code').innerText = `<iframe id="dynamic"
-      src="${newURL}"
-      height="${height}px" width="${width}px" style="border: none"></iframe>`
+  document.querySelector('code').innerText = `<iframe id="dynamic" src="${newURL}" height="${height}px" width="${width}px" style="border: none"></iframe>`;
 }
 
 update();
