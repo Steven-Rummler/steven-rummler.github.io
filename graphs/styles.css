@@ -1,0 +1,66 @@
+html {
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.options {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  gap: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+
+  outline: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.options input {
+  width: 4rem;
+}
+
+iframe {
+  border: none;
+  /* outline: 1px solid #ddd; */
+  /* border-radius: 0.5rem; */
+  /* padding: 0.5rem; */
+
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1);
+}
+
+.codeCopy {
+  display: grid;
+  grid-template-columns: 1fr 3rem;
+  align-items: stretch;
+  outline: 1px solid #eee;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.code {
+  background-color: #eee;
+  padding: 1rem;
+}
+
+.copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}

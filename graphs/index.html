@@ -7,19 +7,84 @@
 </head>
 
 <body>
-  <iframe
-    src="https://stevenrummler.com/graphs/canvasJSBarChart.html?data=Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.85&format=percent"
-    height="200px" width="400px" style="border: none;"></iframe>
-  <iframe
-    src="https://stevenrummler.com/graphs/canvasJSBarChart.html?data=Undergraduate certificate:17976,Associates degree:25608,Bachelor's degree:32568,Master's degree:48468,Doctoral degree:53112&format=currency"
-    height="200px" width="400px" style="border: none;"></iframe>
-  <iframe
-    src="https://stevenrummler.com/graphs/apexBarChart.html?data=Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.85&format=percent"
-    height="200px" width="400px" style="border: none;"></iframe>
-  <iframe
-    src="https://stevenrummler.com/graphs/apexBarChart.html?data=Undergraduate certificate:17976,Associates degree:25608,Bachelor's degree:32568,Master's degree:48468,Doctoral degree:53112&format=currency"
-    height="200px" width="400px" style="border: none;"></iframe>
-  <script src="script.js"></script>
+  <div class="container">
+    <div class="title">Dynamic Embedded Chart Builder</div>
+    <div class="options">
+      <div class="label">Engine</div>
+      <select id='engine'>
+        <option value="canvasjs">CanvasJS</option>
+        <option value="apexcharts">ApexCharts</option>
+      </select>
+      <div class="label">Data</div>
+      <select id="dataFormat">
+        <option
+          value="Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.852&format=percent">
+          Percent Example</option>
+        <option
+          value="Undergraduate certificate:17976,Associates degree:25608,Bachelor's degree:32568,Master's degree:48468,Doctoral degree:53112&format=currency">
+          Currency Example</option>
+      </select>
+      <div class="label">Height</div>
+      <input id='height' type="number" value="200" min="100" max="10000" />
+      <div class="label">Width</div>
+      <input id='width' type="number" value="400" min="100" max="10000" />
+    </div>
+    <iframe id="dynamic"
+      src="http://127.0.0.1:5500/graphs/embed.html?engine=canvasjs&data=Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.852&format=percent"
+      height="200px" width="400px"></iframe>
+    <div class="codeCopy">
+      <code class="code"></code>
+      <div class='copy'><img src="./copy.svg" /></div>
+    </div>
+  </div>
+  <script>
+    const embed = 'http://127.0.0.1:5500/graphs/embed.html';
+    let engine = "canvasjs";
+    let data = "Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.852";
+    let format = "percent";
+    let height = 200;
+    let width = 400;
+
+    document.querySelector("#engine").addEventListener("change", () => {
+      engine = document.querySelector("#engine").value;
+      update();
+    });
+
+    document.querySelector("#dataFormat").addEventListener("change", () => {
+      const value = document.querySelector("#dataFormat").value;
+      data = value.split("&format=")[0];
+      format = value.split("&format=")[1];
+      update();
+    });
+
+    document.querySelector("#height").addEventListener("change", () => {
+      height = document.querySelector("#height").value;
+      update();
+    });
+
+    document.querySelector("#width").addEventListener("change", () => {
+      width = document.querySelector("#width").value;
+      update();
+    });
+
+    function update() {
+      document.querySelector("#dynamic").src = `${embed}?engine=${engine}&data=${data}&format=${format}`;
+      document.querySelector("#dynamic").height = `${height}px`;
+      document.querySelector("#dynamic").width = `${width}px`;
+      document.querySelector('code').innerText = `<iframe id="dynamic"
+      src="${embed}?engine=${engine}&data=${data}&format=${format}"
+      height="${height}px" width="${width}px" style="border: none"></iframe>`
+    }
+
+    update();
+
+    document.querySelector('.copy').addEventListener('click', () => {
+      const code = document.querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Embed link copied to clipboard');
+      });
+    });
+  </script>
 </body>
 
 </html>
