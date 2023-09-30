@@ -1,5 +1,11 @@
 projects = [
   {
+    link: "../charts",
+    title: "Dynamic Embedded Chart Builder",
+    description: "Embedded Charts for Utah Foundation Website",
+    tools: ["CanvasJS", "ApexCharts", "JavaScript", "HTML", "CSS"]
+  },
+  {
     link: "https://rummlerforalpine.com",
     title: "Rummler for Alpine",
     description: "Campaign Website for Local Election Candidate",
