@@ -12,36 +12,34 @@
     <div class="options">
       <div class="label">Engine</div>
       <select id='engine'>
-        <option value="canvasjs">CanvasJS</option>
         <option value="apexcharts">ApexCharts</option>
+        <option value="canvasjs">CanvasJS</option>
       </select>
       <div class="label">Data</div>
       <select id="dataFormat">
         <option
-          value="Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.852&format=percent">
-          Percent Example</option>
-        <option
           value="Undergraduate certificate:17976,Associates degree:25608,Bachelor's degree:32568,Master's degree:48468,Doctoral degree:53112&format=currency">
-          Currency Example</option>
+          Example 1 (Currency)</option>
+        <option
+          value="Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.852&format=percent">
+          Example 2 (Percentages)</option>
       </select>
       <div class="label">Height</div>
       <input id='height' type="number" value="200" min="100" max="10000" />
       <div class="label">Width</div>
       <input id='width' type="number" value="400" min="100" max="10000" />
     </div>
-    <iframe id="dynamic"
-      src="http://127.0.0.1:5500/graphs/embed.html?engine=canvasjs&data=Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.852&format=percent"
-      height="200px" width="400px"></iframe>
+    <iframe id="dynamic"></iframe>
     <div class="codeCopy">
       <code class="code"></code>
       <div class='copy'><img src="./copy.svg" /></div>
     </div>
   </div>
   <script>
-    const embed = 'http://127.0.0.1:5500/graphs/embed.html';
-    let engine = "canvasjs";
-    let data = "Certificate <1 year:0.63,Certificate 1-2 years:0.67,Associates:0.86,Bachelor's:0.97,Master's:1,Overall:0.852";
-    let format = "percent";
+    const embed = 'https:/stevenrummler.com/graphs/embed';
+    let engine = "apexcharts";
+    let data = "Undergraduate certificate:17976,Associates degree:25608,Bachelor's degree:32568,Master's degree:48468,Doctoral degree:53112";
+    let format = "currency";
     let height = 200;
     let width = 400;
 
