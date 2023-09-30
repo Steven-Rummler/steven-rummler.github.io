@@ -28,11 +28,13 @@ document.querySelector("#width").addEventListener("change", () => {
 });
 
 function update() {
-  document.querySelector("#dynamic").src = `${embed}?engine=${engine}&data=${data}&format=${format}`;
+  const newURL = `${embed}?engine=${engine}&data=${data}&format=${format}`;
+  console.log(`Updating code and iframe to ${newURL}`);
+  document.querySelector("#dynamic").src = newURL;
   document.querySelector("#dynamic").height = `${height}px`;
   document.querySelector("#dynamic").width = `${width}px`;
   document.querySelector('code').innerText = `<iframe id="dynamic"
-      src="${embed}?engine=${engine}&data=${data}&format=${format}"
+      src="${newURL}"
       height="${height}px" width="${width}px" style="border: none"></iframe>`
 }
 
