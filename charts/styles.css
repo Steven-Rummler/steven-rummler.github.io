@@ -34,27 +34,40 @@ html {
   width: 4rem;
 }
 
-iframe {
-  border: none;
-  /* outline: 1px solid #ddd; */
-  /* border-radius: 0.5rem; */
-  /* padding: 0.5rem; */
-
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1);
+.panels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
 }
 
-.codeCopy {
+.panel {
   display: grid;
   grid-template-columns: 1fr 3rem;
   align-items: stretch;
   outline: 1px solid #eee;
   border-radius: 0.5rem;
   overflow: hidden;
+  width: min-content;
+}
+
+.chart {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+iframe {
+  border: none;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
 .code {
   background-color: #eee;
   padding: 1rem;
+  outline: 1px solid #eee;
 }
 
 .copy {
@@ -63,4 +76,5 @@ iframe {
   justify-content: center;
   cursor: pointer;
   user-select: none;
+  outline: 1px solid #eee;
 }
