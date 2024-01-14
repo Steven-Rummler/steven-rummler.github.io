@@ -1,5 +1,11 @@
 projects = [
   {
+    link: '../astronomy',
+    title: 'Astronomy',
+    description: 'Using astronomy data to simulate views through my telescopes',
+    tools: ['HTML', 'CSS', 'JavaScript']
+  },
+  {
     link: "../charts",
     title: "Dynamic Embedded Chart Builder",
     description: "Embedded Charts for Utah Foundation Website",
