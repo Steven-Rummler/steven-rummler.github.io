@@ -1,11 +1,14 @@
 import {
   canvasSize,
   center,
-  demoPlanets,
+  demoSky,
   eyepieceFoV,
   myScopeNarrowLens,
   myScopeWideLens,
-  offsetCenterForDemoZoom
+  offsetCenterForDemoZoom,
+  scopes,
+  skies,
+  targets
 } from './data.js';
 import {
   getFoV,
@@ -13,13 +16,82 @@ import {
   skyLocationToTelescopeFoV
 } from './helpers.js';
 
-const views = [
-  { scope: myScopeWideLens, target: center, objects: demoPlanets },
-  { scope: myScopeNarrowLens, target: offsetCenterForDemoZoom, objects: demoPlanets },
-]
+let selectedTarget1 = center;
+let selectedTarget2 = offsetCenterForDemoZoom;
+let selectedScope1 = myScopeWideLens;
+let selectedScope2 = myScopeNarrowLens;
+let selectedSky = demoSky;
+
+function setup() {
+  const scope1Select = document.getElementById('scope1');
+  const scope2Select = document.getElementById('scope2');
+  const target1Select = document.getElementById('target1');
+  const target2Select = document.getElementById('target2');
+  const skySelect = document.getElementById('sky');
+
+  // Add all the options to the selects
+  for (const scope of scopes) {
+    const option = document.createElement('option');
+    option.value = scope.name;
+    option.text = scope.name;
+    scope1Select.appendChild(option);
+    scope2Select.appendChild(option.cloneNode(true));
+  }
+  for (const target of targets) {
+    const option = document.createElement('option');
+    option.value = target.name;
+    option.text = target.name;
+    target1Select.appendChild(option);
+    target2Select.appendChild(option.cloneNode(true));
+  }
+  for (const sky of skies) {
+    const option = document.createElement('option');
+    option.value = sky.name;
+    option.text = sky.name;
+    skySelect.appendChild(option);
+  }
+
+  // Set the selects to the current values
+  scope1Select.value = selectedScope1.name;
+  scope2Select.value = selectedScope2.name;
+  target1Select.value = selectedTarget1.name;
+  target2Select.value = selectedTarget2.name;
+  skySelect.value = selectedSky.name;
+
+  // Add event listeners to the selects
+  scope1Select.addEventListener('change', () => {
+    selectedScope1 = scopes.find(scope => scope.name === scope1Select.value);
+    draw();
+  });
+  scope2Select.addEventListener('change', () => {
+    selectedScope2 = scopes.find(scope => scope.name === scope2Select.value);
+    draw();
+  });
+  target1Select.addEventListener('change', () => {
+    selectedTarget1 = targets.find(target => target.name === target1Select.value);
+    draw();
+  });
+  target2Select.addEventListener('change', () => {
+    selectedTarget2 = targets.find(target => target.name === target2Select.value);
+    draw();
+  });
+  skySelect.addEventListener('change', () => {
+    selectedSky = targets.find(target => target.name === skySelect.value);
+    draw();
+  });
+}
+
+setup();
 
 function draw() {
   const start = performance.now();
+
+  const views = [
+    { scope: selectedScope1, target: selectedTarget1, objects: selectedSky.objects },
+    { scope: selectedScope2, target: selectedTarget2, objects: selectedSky.objects },
+  ];
+
+  const scopes = document.getElementById('scopes');
 
   for (const [index, { scope, target, objects }] of views.entries()) {
     const { mirrorDiameter, telescopeFocalLength, eyepieceFocalLength } = scope;
@@ -40,7 +112,7 @@ function draw() {
       canvas.id = name.slice(1);
       canvas.width = canvasSize;
       canvas.height = canvasSize;
-      document.body.appendChild(canvas);
+      scopes.appendChild(canvas);
     }
     const ctx = canvas.getContext('2d');
 

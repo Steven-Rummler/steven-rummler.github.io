@@ -6,20 +6,20 @@ export const eyeAdjustmentFactor = 1000000;
 export const canvasSize = 600;
 
 // Targets
-export const center = { viewRAsc: 0, viewDecl: 0 };
-export const offsetCenterForDemoZoom = { viewRAsc: 1, viewDecl: 0 };
+export const center = { name: 'Centered', viewRAsc: 0, viewDecl: 0 };
+export const offsetCenterForDemoZoom = { name: 'Centered with Offset for Demo Planets', viewRAsc: 1, viewDecl: 0 };
 export const targets = [center, offsetCenterForDemoZoom];
 
 // Scopes
-export const babyScope = { mirrorDiameter: 4, telescopeFocalLength: 600, eyepieceFocalLength: 60 };
-export const myScopeWideLens = { mirrorDiameter: 8, telescopeFocalLength: 1200, eyepieceFocalLength: 30 };
-export const myScopeNarrowLens = { mirrorDiameter: 8, telescopeFocalLength: 1200, eyepieceFocalLength: 9 };
-export const bigScopeWideLens = { mirrorDiameter: 14, telescopeFocalLength: 1600, eyepieceFocalLength: 30 };
-export const bigScopeNarrowLens = { mirrorDiameter: 14, telescopeFocalLength: 1600, eyepieceFocalLength: 9 };
+export const babyScope = { name: '4-inch mirror with 60mm lens', mirrorDiameter: 4, telescopeFocalLength: 600, eyepieceFocalLength: 60 };
+export const myScopeWideLens = { name: '8-inch mirror with 30mm lens.', mirrorDiameter: 8, telescopeFocalLength: 1200, eyepieceFocalLength: 30 };
+export const myScopeNarrowLens = { name: '8-inch mirror with 9mm lens.', mirrorDiameter: 8, telescopeFocalLength: 1200, eyepieceFocalLength: 9 };
+export const bigScopeWideLens = { name: '14-inch mirror with 30mm lens.', mirrorDiameter: 14, telescopeFocalLength: 1600, eyepieceFocalLength: 30 };
+export const bigScopeNarrowLens = { name: '14-inch mirror with 9mm lens.', mirrorDiameter: 14, telescopeFocalLength: 1600, eyepieceFocalLength: 9 };
 export const scopes = [babyScope, myScopeWideLens, myScopeNarrowLens, bigScopeWideLens, bigScopeNarrowLens];
 
 // Objects
-export const demoPlanets = [
+const demoPlanets = [
   { name: 'Sun', diameter: degrees(0, 30), magnitude: -26.74, hue: 50, location: { rasc: degrees(359, 15), decl: 0 } },
   { name: 'Moon', diameter: degrees(0, 30), magnitude: -12.74, hue: 50, location: { rasc: degrees(0, 15), decl: 0 } },
   { name: 'Mercury', diameter: degrees(0, 0, 13), magnitude: -0.42, hue: 50, location: { rasc: degrees(0, 50), decl: 0 } },
@@ -82,3 +82,6 @@ for (let i = 0; i < totalMagnitudePoolSize; i++) {
     hue: random(seed) * 360,
   });
 }
+export const demoSky = { name: 'Demo Sky', objects: [...demoPlanets, ...stars] };
+const realSky = { name: 'Real Sky', objects: [...realPlanets, ...stars] };
+export const skies = [demoSky, realSky];
