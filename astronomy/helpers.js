@@ -85,8 +85,8 @@ export function getFoV({ eyepieceFoV, magnification }) {
   return eyepieceFoV / magnification;
 }
 
-export function drawStar(ctx, canvasX, canvasY, magnitude, mirrorAdvantage, eyeAdjustmentFactor, canvasSize) {
-  const lumens = Math.pow(10, (-14.18 - magnitude) / 2.5);
+export function drawStar(ctx, canvasX, canvasY, magnitude, mirrorAdvantage, eyeAdjustmentFactor, canvasSize, noBlending) {
+  const lumens = Math.pow(4, (-14.18 - magnitude) / 2.5) / 40000;
   const advantagedLumens = lumens * mirrorAdvantage;
   const adjustedLumens = advantagedLumens * eyeAdjustmentFactor;
   const maxBrightness = Math.min(1, adjustedLumens);
@@ -106,31 +106,41 @@ export function drawStar(ctx, canvasX, canvasY, magnitude, mirrorAdvantage, eyeA
       const centerOffsetX = Math.abs(x - size / 2);
       const centerOffsetY = Math.abs(y - size / 2);
       const centerPoint = centerOffsetX < 1 && centerOffsetY < 1;
-      const brightness = centerPoint ? maxBrightness : maxBrightness / (Math.sqrt(centerOffsetX) + Math.sqrt(centerOffsetY) + 1);
+      const brightness = centerPoint ? maxBrightness : maxBrightness / (Math.pow(centerOffsetX, 3 / 4) + Math.pow(centerOffsetY, 3 / 4) + 1);
       rawData[index] = brightness;
     }
   }
 
   for (const [index, brightness] of rawData.entries()) {
     // Scale the brightness to drop off more quickly
-    const relativeBrightness = 1.5 * (brightness / maxBrightness) - 0.5 * maxBrightness;
+    const relativeBrightness = 1.1 * (brightness / maxBrightness) - 0.1 * maxBrightness;
     if (relativeBrightness < 0) continue;
 
-    // Get current pixel data and compute pixel brightness from star
-    const absoluteBrightness = Math.min(1, relativeBrightness * adjustedLumens);
-    const currentR = image.data[index * 4];
-    const currentG = image.data[index * 4 + 1];
-    const currentB = image.data[index * 4 + 2];
-    const currentA = image.data[index * 4 + 3];
-    const starR = 255;
-    const starG = 255;
-    const starB = 255;
-    const starA = 255 * absoluteBrightness;
-    // Overlay the star color over the current color
-    image.data[index * 4] = (starR * starA + currentR * (255 - starA)) / 255;
-    image.data[index * 4 + 1] = (starG * starA + currentG * (255 - starA)) / 255;
-    image.data[index * 4 + 2] = (starB * starA + currentB * (255 - starA)) / 255;
-    image.data[index * 4 + 3] = (starA + currentA * (255 - starA)) / 255;
+    if (noBlending) {
+      // Set the pixel values directly
+      image.data[index * 4] = 255
+      image.data[index * 4 + 1] = 255;
+      image.data[index * 4 + 2] = 255;
+      image.data[index * 4 + 3] = 255 * Math.min(1, relativeBrightness * adjustedLumens)
+    } else {
+      // Get current pixel data and compute pixel brightness from star
+      const absoluteBrightness = Math.min(1, relativeBrightness * adjustedLumens);
+      const currentR = image.data[index * 4];
+      const currentG = image.data[index * 4 + 1];
+      const currentB = image.data[index * 4 + 2];
+      const currentA = image.data[index * 4 + 3];
+      const starR = 255;
+      const starG = 255;
+      const starB = 255;
+      const starA = 255 * absoluteBrightness;
+      // Overlay the star color over the current color
+      image.data[index * 4] = (starR * starA + currentR * (255 - starA)) / 255;
+      image.data[index * 4 + 1] = (starG * starA + currentG * (255 - starA)) / 255;
+      image.data[index * 4 + 2] = (starB * starA + currentB * (255 - starA)) / 255;
+      // Max it to avoid bad overlaps
+      // image.data[index * 4 + 3] = (starA + currentA * (255 - starA)) / 255;
+      image.data[index * 4 + 3] = Math.max(currentA, starA);
+    }
   }
 
   ctx.putImageData(image, canvasXStart, canvasYStart);

@@ -171,3 +171,80 @@ function draw() {
 }
 
 draw();
+
+const starCanvasSize = 100;
+const starExampleScope = myScopeWideLens;
+const exampleStars = [
+  { magnitude: -1 },
+  { magnitude: 0 },
+  { magnitude: 1 },
+  { magnitude: 2 },
+  { magnitude: 3 },
+  { magnitude: 4 },
+  { magnitude: 5 },
+  { magnitude: 6 },
+  { magnitude: 7 },
+  { magnitude: 8 },
+]
+
+function drawExampleStars() {
+  const starContainer = document.querySelector('#stars');
+
+  for (const star of exampleStars) {
+    const name = `#star${star.magnitude}`
+    const mirrorAdvantage = 4 * Math.PI * Math.pow(starExampleScope.mirrorDiameter, 2);
+
+    // Check if the canvas already exists, if not create it
+    const canvasExists = document.querySelector(name) !== null;
+    const canvas = document.querySelector(name) ?? document.createElement('canvas');
+    if (!canvasExists) {
+      canvas.id = name.slice(1);
+      canvas.width = starCanvasSize;
+      canvas.height = starCanvasSize;
+      starContainer.appendChild(canvas);
+    }
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    // Draw a black circle to represent the lens of the telescope
+    ctx.beginPath();
+    ctx.arc(starCanvasSize / 2, starCanvasSize / 2, starCanvasSize / 2, 0, 2 * Math.PI);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+
+    // Draw the star
+    const x = starCanvasSize / 2;
+    const y = starCanvasSize / 2;
+    drawStar(ctx, x, y, star.magnitude, mirrorAdvantage, eyeAdjustmentFactor, starCanvasSize);
+  }
+}
+
+drawExampleStars();
+
+const exportSize = 64;
+
+function exportStarImages() {
+  const mirrorAdvantage = 4 * Math.PI * Math.pow(starExampleScope.mirrorDiameter, 2);
+
+  for (const star of exampleStars) {
+    // Create a new canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = exportSize;
+    canvas.height = exportSize;
+    const ctx = canvas.getContext('2d');
+
+    // Draw the star without blending
+    const x = exportSize / 2;
+    const y = exportSize / 2;
+    drawStar(ctx, x, y, star.magnitude, mirrorAdvantage, eyeAdjustmentFactor, exportSize, 'noBlending');
+
+    // Export the canvas
+    const link = document.createElement('a');
+    link.download = `star-${star.magnitude}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  }
+}
+
+// Add export listener to export button
+const exportButton = document.querySelector('#export');
+exportButton.addEventListener('click', exportStarImages);

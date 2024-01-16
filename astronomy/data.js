@@ -2,7 +2,7 @@ import { degrees, random, randomSkyLocation, seed } from "./helpers.js";
 
 // Constants
 export const eyepieceFoV = 52;
-export const eyeAdjustmentFactor = 5_000_000;
+export const eyeAdjustmentFactor = 2_000_000;
 export const canvasSize = 600;
 
 // Targets
