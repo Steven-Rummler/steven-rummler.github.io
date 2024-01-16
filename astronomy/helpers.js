@@ -21,7 +21,7 @@ export function randomSkyLocation() {
 }
 
 // Conversions
-export function skyLocationToTelescopeFoV({ rasc, decl, viewRAsc, viewDecl, viewRadius }) {
+export function skyLocationToTelescopeFoV({ rasc, decl, viewRAsc, viewDecl, viewRadius, planetDiameter }) {
   // Calculate the smallest angles between the object and the center of the view
 
   const objectCoordinateSets = [{ rasc, decl }];
@@ -59,7 +59,7 @@ export function skyLocationToTelescopeFoV({ rasc, decl, viewRAsc, viewDecl, view
   }
 
   // If the object isn't within 200% of the viewRadius from the center, return null
-  if (smallestDistance > 2 * viewRadius) return null;
+  if (smallestDistance > viewRadius + (planetDiameter ?? 0)) return null;
 
   // Return x and y values between -1 and 1 representing the object's position in the view
   return {
@@ -83,4 +83,55 @@ export function getMagnification({ telescopeFocalLength, eyepieceFocalLength }) 
 }
 export function getFoV({ eyepieceFoV, magnification }) {
   return eyepieceFoV / magnification;
+}
+
+export function drawStar(ctx, canvasX, canvasY, magnitude, mirrorAdvantage, eyeAdjustmentFactor, canvasSize) {
+  const lumens = Math.pow(10, (-14.18 - magnitude) / 2.5);
+  const advantagedLumens = lumens * mirrorAdvantage;
+  const adjustedLumens = advantagedLumens * eyeAdjustmentFactor;
+  const maxBrightness = Math.min(1, adjustedLumens);
+
+  const magnitudeSize = Math.ceil(Math.pow(2, 16) / (Math.pow(magnitude + 4, 2) + 16));
+  const size = Math.min(canvasSize * 2, magnitudeSize);
+  const canvasXStart = Math.floor(canvasX - size / 2);
+  const canvasYStart = Math.floor(canvasY - size / 2);
+  const image = ctx.getImageData(canvasXStart, canvasYStart, size, size);
+
+  const range = Array.from({ length: size }, (_, i) => i);
+  const rawData = Array.from({ length: size * size }, () => 0);
+
+  for (const x of range) {
+    for (const y of range) {
+      const index = x + y * size;
+      const centerOffsetX = Math.abs(x - size / 2);
+      const centerOffsetY = Math.abs(y - size / 2);
+      const centerPoint = centerOffsetX < 1 && centerOffsetY < 1;
+      const brightness = centerPoint ? maxBrightness : maxBrightness / (Math.sqrt(centerOffsetX) + Math.sqrt(centerOffsetY) + 1);
+      rawData[index] = brightness;
+    }
+  }
+
+  for (const [index, brightness] of rawData.entries()) {
+    // Scale the brightness to drop off more quickly
+    const relativeBrightness = 1.5 * (brightness / maxBrightness) - 0.5 * maxBrightness;
+    if (relativeBrightness < 0) continue;
+
+    // Get current pixel data and compute pixel brightness from star
+    const absoluteBrightness = Math.min(1, relativeBrightness * adjustedLumens);
+    const currentR = image.data[index * 4];
+    const currentG = image.data[index * 4 + 1];
+    const currentB = image.data[index * 4 + 2];
+    const currentA = image.data[index * 4 + 3];
+    const starR = 255;
+    const starG = 255;
+    const starB = 255;
+    const starA = 255 * absoluteBrightness;
+    // Overlay the star color over the current color
+    image.data[index * 4] = (starR * starA + currentR * (255 - starA)) / 255;
+    image.data[index * 4 + 1] = (starG * starA + currentG * (255 - starA)) / 255;
+    image.data[index * 4 + 2] = (starB * starA + currentB * (255 - starA)) / 255;
+    image.data[index * 4 + 3] = (starA + currentA * (255 - starA)) / 255;
+  }
+
+  ctx.putImageData(image, canvasXStart, canvasYStart);
 }

@@ -1,16 +1,19 @@
 import {
   canvasSize,
   center,
-  demoSky,
+  demoPlanetList,
+  eyeAdjustmentFactor,
   eyepieceFoV,
   myScopeNarrowLens,
   myScopeWideLens,
   offsetCenterForDemoZoom,
+  planetLists,
   scopes,
-  skies,
+  stars,
   targets
 } from './data.js';
 import {
+  drawStar,
   getFoV,
   getMagnification,
   skyLocationToTelescopeFoV
@@ -20,14 +23,14 @@ let selectedTarget1 = center;
 let selectedTarget2 = offsetCenterForDemoZoom;
 let selectedScope1 = myScopeWideLens;
 let selectedScope2 = myScopeNarrowLens;
-let selectedSky = demoSky;
+let selectedPlanetList = demoPlanetList;
 
 function setup() {
   const scope1Select = document.getElementById('scope1');
   const scope2Select = document.getElementById('scope2');
   const target1Select = document.getElementById('target1');
   const target2Select = document.getElementById('target2');
-  const skySelect = document.getElementById('sky');
+  const planetListSelect = document.getElementById('planets');
 
   // Add all the options to the selects
   for (const scope of scopes) {
@@ -44,11 +47,11 @@ function setup() {
     target1Select.appendChild(option);
     target2Select.appendChild(option.cloneNode(true));
   }
-  for (const sky of skies) {
+  for (const planetList of planetLists) {
     const option = document.createElement('option');
-    option.value = sky.name;
-    option.text = sky.name;
-    skySelect.appendChild(option);
+    option.value = planetList.name;
+    option.text = planetList.name;
+    planetListSelect.appendChild(option);
   }
 
   // Set the selects to the current values
@@ -56,7 +59,7 @@ function setup() {
   scope2Select.value = selectedScope2.name;
   target1Select.value = selectedTarget1.name;
   target2Select.value = selectedTarget2.name;
-  skySelect.value = selectedSky.name;
+  planetListSelect.value = selectedPlanetList.name;
 
   // Add event listeners to the selects
   scope1Select.addEventListener('change', () => {
@@ -75,8 +78,8 @@ function setup() {
     selectedTarget2 = targets.find(target => target.name === target2Select.value);
     draw();
   });
-  skySelect.addEventListener('change', () => {
-    selectedSky = targets.find(target => target.name === skySelect.value);
+  planetListSelect.addEventListener('change', () => {
+    selectedPlanetList = planetLists.find(target => target.name === planetListSelect.value);
     draw();
   });
 }
@@ -87,13 +90,15 @@ function draw() {
   const start = performance.now();
 
   const views = [
-    { scope: selectedScope1, target: selectedTarget1, objects: selectedSky.objects },
-    { scope: selectedScope2, target: selectedTarget2, objects: selectedSky.objects },
+    { scope: selectedScope1, target: selectedTarget1, planets: selectedPlanetList.planets },
+    { scope: selectedScope2, target: selectedTarget2, planets: selectedPlanetList.planets },
   ];
+
+  console.log(views);
 
   const scopes = document.getElementById('scopes');
 
-  for (const [index, { scope, target, objects }] of views.entries()) {
+  for (const [index, { scope, target, planets }] of views.entries()) {
     const { mirrorDiameter, telescopeFocalLength, eyepieceFocalLength } = scope;
     const { viewRAsc, viewDecl } = target;
 
@@ -114,7 +119,7 @@ function draw() {
       canvas.height = canvasSize;
       scopes.appendChild(canvas);
     }
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
     // Draw a black circle to represent the lens of the telescope
     ctx.beginPath();
@@ -122,14 +127,10 @@ function draw() {
     ctx.fillStyle = 'black';
     ctx.fill();
 
-    // Draw objects
-    for (const object of objects) {
-      // const relativeMagnitude = 0.4 ** object.magnitude;
-      // const baseBrightness = 1;
-      // const brightness = baseBrightness * relativeMagnitude * mirrorAdvantage * eyeAdjustmentFactor;
-
+    // Draw stars
+    for (const star of stars) {
       const locationInLens = skyLocationToTelescopeFoV({
-        ...object.location,
+        ...star.location,
         viewRAsc,
         viewDecl,
         viewRadius: fov,
@@ -137,15 +138,31 @@ function draw() {
       if (locationInLens === null) continue;
       const x = (locationInLens.x + 1) * canvasSize / 2;
       const y = (locationInLens.y + 1) * canvasSize / 2;
+      drawStar(ctx, x, y, star.magnitude, mirrorAdvantage, eyeAdjustmentFactor, canvasSize);
+    }
 
-      const sizeOnSky = object.diameter ?? 0;
+    // Draw planets
+    for (const planet of planets) {
+      const locationInLens = skyLocationToTelescopeFoV({
+        ...planet.location,
+        viewRAsc,
+        viewDecl,
+        viewRadius: fov,
+        planetDiameter: planet.diameter,
+      });
+      if (locationInLens === null) continue;
+      const x = (locationInLens.x + 1) * canvasSize / 2;
+      const y = (locationInLens.y + 1) * canvasSize / 2;
+
+      const sizeOnSky = planet.diameter ?? 0;
       const shareOfSky = sizeOnSky / fov;
       const size = Math.max(1, shareOfSky * canvasSize);
       const brightness = size === 1 ? shareOfSky * canvasSize : 1;
 
+      // Draw planet
       ctx.beginPath();
       ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
-      ctx.fillStyle = `hsl(${object.hue ?? 50}, 10%, ${100 * brightness}%)`;
+      ctx.fillStyle = `hsl(${planet.hue ?? 50}, 10%, ${100 * brightness}%)`;
       ctx.fill();
     }
   }

@@ -2,7 +2,7 @@ import { degrees, random, randomSkyLocation, seed } from "./helpers.js";
 
 // Constants
 export const eyepieceFoV = 52;
-export const eyeAdjustmentFactor = 1000000;
+export const eyeAdjustmentFactor = 5_000_000;
 export const canvasSize = 600;
 
 // Targets
@@ -60,7 +60,7 @@ const magnitudePool = [
 ];
 const totalMagnitudePoolSize = magnitudePool.reduce((acc, { poolSize }) => acc + poolSize, 0);
 // Generate a random list of stars.
-const stars = [];
+export const stars = [];
 for (let i = 0; i < totalMagnitudePoolSize; i++) {
   stars.push({
     location: randomSkyLocation(),
@@ -82,6 +82,6 @@ for (let i = 0; i < totalMagnitudePoolSize; i++) {
     hue: random(seed) * 360,
   });
 }
-export const demoSky = { name: 'Demo Sky', objects: [...demoPlanets, ...stars] };
-const realSky = { name: 'Real Sky', objects: [...realPlanets, ...stars] };
-export const skies = [demoSky, realSky];
+export const demoPlanetList = { name: 'Demo Planets', planets: demoPlanets };
+const realPlanetList = { name: 'Real Planets', planets: realPlanets };
+export const planetLists = [demoPlanetList, realPlanetList];
